@@ -7,10 +7,21 @@ class AuthForm extends StatefulWidget {
 
 class _AuthFormState extends State<AuthForm> {
   final _formKey = GlobalKey<FormState>();
+  var _userEmail = '';
+  var _userName = '';
+  var _userPassword = '';
 
   void _trySubmit() {
-    _formKey.currentState.validate();
+    final isValid = _formKey.currentState.validate();
     // This wi trigger all the validators of all the text form field in the form
+    FocusScope.of(context).unfocus();
+
+    if (isValid) {
+      _formKey.currentState.save();
+      print(_userEmail);
+      print(_userName);
+      print(_userPassword);
+    }
   }
 
   @override
@@ -37,17 +48,23 @@ class _AuthFormState extends State<AuthForm> {
                     decoration: InputDecoration(
                       labelText: "Email Address",
                     ),
+                    onSaved: (value) {
+                      _userEmail = value;
+                    },
                   ),
                   TextFormField(
                     validator: (value) {
                       if (value.isEmpty || value.length < 4) {
-                        return 'Please enter atleast 4 characters';
+                        return 'Please enter at least 4 characters';
                       }
                       return null;
                     },
                     decoration: InputDecoration(
                       labelText: "Username",
                     ),
+                    onSaved: (value) {
+                      _userName = value;
+                    },
                   ),
                   TextFormField(
                     validator: (value) {
@@ -59,13 +76,16 @@ class _AuthFormState extends State<AuthForm> {
                     decoration: InputDecoration(
                       labelText: "Password",
                     ),
+                    onSaved: (value) {
+                      _userPassword = value;
+                    },
                     obscureText: true,
                   ),
                   SizedBox(
                     height: 12,
                   ),
                   RaisedButton(
-                    onPressed: () {},
+                    onPressed: _trySubmit,
                     child: Text('Login'),
                   ),
                   FlatButton(
