@@ -37,6 +37,7 @@ class Messages extends StatelessWidget {
                 key: ValueKey(
                   chatDocs[i].documentID,
                 ),
+                username: chatDocs[i]['username'],
               ),
               itemCount: chatDocs.length,
             );

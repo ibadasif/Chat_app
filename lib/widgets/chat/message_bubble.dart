@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class MessageBubble extends StatelessWidget {
@@ -5,11 +6,14 @@ class MessageBubble extends StatelessWidget {
     this.message,
     this.isMe,
     this.key,
+    this.username,
   });
 
   final Key key;
   final String message;
   final bool isMe;
+  final String username;
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -34,11 +38,40 @@ class MessageBubble extends StatelessWidget {
             vertical: 4,
             horizontal: 8,
           ),
-          child: Text(
-            message,
-            style: TextStyle(
-              color: isMe ? Colors.black : Theme.of(context).backgroundColor,
-            ),
+          child: Column(
+            crossAxisAlignment:
+                isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            children: [
+              isMe
+                  ? Text(
+                      'You',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: isMe
+                            ? Colors.black
+                            : Theme.of(context).backgroundColor,
+                      ),
+                    )
+                  : Text(
+                      username,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: isMe
+                            ? Colors.black
+                            : Theme.of(context).backgroundColor,
+                      ),
+                    ),
+              Text(
+                message,
+                style: TextStyle(
+                  color:
+                      isMe ? Colors.black : Theme.of(context).backgroundColor,
+                ),
+                textAlign: isMe ? TextAlign.end : TextAlign.start,
+              ),
+            ],
           ),
         ),
       ],
