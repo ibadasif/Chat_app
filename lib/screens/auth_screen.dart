@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:chat_app/widgets/auth_form.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import "package:cloud_firestore/cloud_firestore.dart";
+import 'package:firebase_storage/firebase_storage.dart';
 
 class AuthScreen extends StatefulWidget {
   @override
@@ -19,6 +22,7 @@ class _AuthScreenState extends State<AuthScreen> {
     String password,
     bool isLogin,
     BuildContext ctx,
+    File image,
   ) async {
     AuthResult authResult;
 
@@ -36,12 +40,27 @@ class _AuthScreenState extends State<AuthScreen> {
           email: email,
           password: password,
         );
+
+        // Perform image upload here before we write extra user data
+        // ref() gives us access to our root cloud storage bucket
+        // child() allows us to set a new path, and that allows us to where we can store or read our file
+        final ref = FirebaseStorage.instance
+            .ref()
+            .child('user_image')
+            .child(authResult.user.uid + '.jpg');
+        //Start upload
+        //put a file to that path and use last segmant of the path as the file name
+        await ref.putFile(image).onComplete;
+
+        final imgUrl = await ref.getDownloadURL();
+
         await Firestore.instance
             .collection('users')
             .document(authResult.user.uid)
             .setData({
           'username': username,
           'email': email,
+          'image_url': imgUrl,
         });
       }
     } on PlatformException catch (err) {
