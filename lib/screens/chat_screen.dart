@@ -14,7 +14,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flutter Chat'),
+        title: Text('Chatters'),
         actions: [
           DropdownButton(
             icon: Icon(
