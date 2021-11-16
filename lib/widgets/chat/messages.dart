@@ -38,6 +38,7 @@ class Messages extends StatelessWidget {
                   chatDocs[i].documentID,
                 ),
                 username: chatDocs[i]['username'],
+                userImage: chatDocs[i]['userImage'],
               ),
               itemCount: chatDocs.length,
             );
